@@ -1,0 +1,22 @@
+{
+    "name": "code-tieumomo/laravel-media-manager",
+    "description": "A full-featured media manager for Laravel applications.",
+    "type": "library",
+    "require": {
+        "illuminate/support": "^12.0",
+        "livewire/livewire": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MediaManager\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MediaManager\\MediaManagerServiceProvider"
+            ]
+        }
+    },
+    "version": "dev-main"
+} 
