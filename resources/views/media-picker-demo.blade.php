@@ -15,18 +15,18 @@
     </div>
     @livewireScripts
     <script>
-        // document.addEventListener('livewire:load', function () {
-        //     window.Livewire.on('mediaPickerSelected', function (urls) {
-        //         const container = document.getElementById('selected-images');
-        //         container.innerHTML = '';
-        //         (Array.isArray(urls) ? urls : [urls]).forEach(url => {
-        //             const img = document.createElement('img');
-        //             img.src = url;
-        //             img.className = 'w-32 h-32 object-cover rounded border m-2 inline-block';
-        //             container.appendChild(img);
-        //         });
-        //     });
-        // });
+        document.addEventListener('livewire:load', function () {
+            window.Livewire.on('mediaPickerSelected', function (urls) {
+                const container = document.getElementById('selected-images');
+                container.innerHTML = '';
+                (Array.isArray(urls) ? urls : [urls]).forEach(url => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.className = 'w-32 h-32 object-cover rounded border m-2 inline-block';
+                    container.appendChild(img);
+                });
+            });
+        });
     </script>
 </body>
 </html> 

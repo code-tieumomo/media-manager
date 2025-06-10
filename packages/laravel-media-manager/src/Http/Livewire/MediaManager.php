@@ -5,15 +5,18 @@ namespace MediaManager\Http\Livewire;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
+use Spatie\LivewireFilepond\WithFilePond;
 
 // NOTE: Livewire\Component must be available in the host Laravel app for this package to work.
 
 class MediaManager extends Component
 {
     use WithFileUploads;
+    use WithFilePond;
 
     public $currentPath = '/';
     public $files = [];
+    public $tmpFiles = [];
     public $folders = [];
     public $filter = 'all'; // all, images, docs
     public $upload;
@@ -43,6 +46,10 @@ class MediaManager extends Component
 
     public function filterFiles($files)
     {
+        $files = array_filter($files, function($file) {
+            return !str_starts_with($file, '.'); // Exclude hidden files
+        });
+
         if ($this->filter === 'all') return $files;
         $allowed = config('media-manager.allowed_types', []);
         return array_filter($files, function($file) use ($allowed) {
@@ -105,7 +112,23 @@ class MediaManager extends Component
 
     public function goToFolder($folder)
     {
+        if ($folder === '.') {
+            $folder = '/';
+        }
         $this->currentPath = $folder;
+        $this->refreshFiles();
+    }
+
+    public function saveTmpFiles()
+    {
+        foreach ($this->tmpFiles as $file) {
+            $disk = config('media-manager.disk', 'public');
+            $fileName = $file->getClientOriginalName();
+            $file->storeAs($this->currentPath, $fileName, $disk);
+        }
+
+        $this->tmpFiles = [];
+        $this->dispatch('filepond-reset-tmpFiles');
         $this->refreshFiles();
     }
 
