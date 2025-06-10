@@ -60,7 +60,8 @@ class MediaManager extends Component
     {
         $disk = config('media-manager.disk', 'public');
         foreach ((array) $this->upload as $file) {
-            $file->store($this->currentPath, $disk);
+            $fileName = $file->getClientOriginalName();
+            $file->storeAs($this->currentPath, $fileName, $disk);
         }
         $this->refreshFiles();
     }

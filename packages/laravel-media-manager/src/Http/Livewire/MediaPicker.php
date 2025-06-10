@@ -6,13 +6,11 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 
-// NOTE: Livewire\Component must be available in the host Laravel app for this package to work.
-
 class MediaPicker extends Component
 {
     use WithFileUploads;
 
-    public $show = true;
+    public $show = false;
     public $images = [];
     public $folders = [];
     public $upload;
@@ -22,10 +20,25 @@ class MediaPicker extends Component
 
     protected $listeners = ['openMediaPicker' => 'open'];
 
+    // For wire:model support
+    public function getValueProperty()
+    {
+        return $this->selectedImage;
+    }
+
+    public function updatedSelectedImage($value)
+    {
+        $this->emitUp('updated', $this->attributes['wire:model'] ?? null, $value);
+    }
+
     public function mount($path = '/')
     {
         $this->currentPath = $path;
         $this->refreshImages();
+        // If wire:model is set, initialize selectedImage from it
+        if ($this->hasProperty('value')) {
+            $this->selectedImage = $this->value ?? [];
+        }
     }
 
     public function open($path = '/')
@@ -81,11 +94,14 @@ class MediaPicker extends Component
             $this->emitUp('mediaPickerSelected', $url);
             $this->close();
         }
+        $this->dispatch('selectedImageUpdated', $this->selectedImage);
+        $this->dispatch('updated', $this->attributes['wire:model'] ?? null, $this->selectedImage);
     }
 
     public function confirmSelection()
     {
-        $this->emitUp('mediaPickerSelected', $this->selectedImage);
+        $this->dispatch('mediaPickerSelected', $this->selectedImage);
+        $this->dispatch('updated', $this->attributes['wire:model'] ?? null, $this->selectedImage);
         $this->close();
     }
 
@@ -93,4 +109,4 @@ class MediaPicker extends Component
     {
         return view('media-manager::media-picker');
     }
-} 
+}
