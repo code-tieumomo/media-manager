@@ -1,8 +1,0 @@
-{
-    "name": "code-tieumomo/laravel-media-manager",
-    "description": "A full-featured media manager for Laravel applications.",
-    "type": "library",
-    "require": {
-        "illuminate/support": "^11.0"
-    }
-}
