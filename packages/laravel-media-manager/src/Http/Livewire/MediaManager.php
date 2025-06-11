@@ -23,6 +23,8 @@ class MediaManager extends Component
     public $newFolderName = '';
     public $selected = [];
     public $moveTarget = null;
+    public $directoryTree = [];
+    public $expandedFolders = [];
 
     protected $rules = [
         'upload.*' => 'file',
@@ -33,6 +35,67 @@ class MediaManager extends Component
     {
         $this->currentPath = $path;
         $this->refreshFiles();
+        $this->refreshDirectoryTree();
+        $this->autoExpandCurrentPath();
+    }
+
+    public function buildDirectoryTree($rootPath = '/')
+    {
+        $disk = config('media-manager.disk', 'public');
+        return $this->buildDirectoryTreeRecursive($rootPath, $disk);
+    }
+
+    private function buildDirectoryTreeRecursive($path, $disk)
+    {
+        $directories = Storage::disk($disk)->directories($path);
+        $tree = [];
+
+        foreach ($directories as $directory) {
+            $name = basename($directory);
+            $tree[] = [
+                'name' => $name,
+                'path' => $directory,
+                'children' => $this->buildDirectoryTreeRecursive($directory, $disk),
+                'expanded' => in_array($directory, $this->expandedFolders),
+            ];
+        }
+
+        return $tree;
+    }
+
+    public function refreshDirectoryTree()
+    {
+        $this->directoryTree = $this->buildDirectoryTree('/');
+    }
+
+    public function autoExpandCurrentPath()
+    {
+        if ($this->currentPath === '/') {
+            return;
+        }
+
+        $pathParts = explode('/', trim($this->currentPath, '/'));
+        $currentPath = '';
+        
+        foreach ($pathParts as $part) {
+            $currentPath .= '/' . $part;
+            $currentPath = ltrim($currentPath, '/');
+            if ($currentPath && !in_array($currentPath, $this->expandedFolders)) {
+                $this->expandedFolders[] = $currentPath;
+            }
+        }
+        
+        $this->refreshDirectoryTree();
+    }
+
+    public function toggleFolder($path)
+    {
+        if (in_array($path, $this->expandedFolders)) {
+            $this->expandedFolders = array_filter($this->expandedFolders, fn($p) => $p !== $path);
+        } else {
+            $this->expandedFolders[] = $path;
+        }
+        $this->refreshDirectoryTree();
     }
 
     public function refreshFiles()
@@ -81,6 +144,7 @@ class MediaManager extends Component
             Storage::disk($disk)->makeDirectory($this->currentPath . '/' . $folder);
             $this->newFolderName = '';
             $this->refreshFiles();
+            $this->refreshDirectoryTree();
         }
     }
 
@@ -93,6 +157,7 @@ class MediaManager extends Component
             Storage::disk($disk)->deleteDirectory($path);
         }
         $this->refreshFiles();
+        $this->refreshDirectoryTree();
     }
 
     public function move($from, $to)
@@ -117,6 +182,7 @@ class MediaManager extends Component
         }
         $this->currentPath = $folder;
         $this->refreshFiles();
+        $this->autoExpandCurrentPath();
     }
 
     public function saveTmpFiles()
@@ -130,6 +196,7 @@ class MediaManager extends Component
         $this->tmpFiles = [];
         $this->dispatch('filepond-reset-tmpFiles');
         $this->refreshFiles();
+        $this->refreshDirectoryTree();
     }
 
     public function render()
