@@ -1,4 +1,17 @@
-<div class="min-h-screen bg-gray-100 p-6" x-data="" x-on:filepond-upload-completed="$wire.saveTmpFiles()">
+<div class="min-h-screen bg-gray-100 p-6"
+     x-data="{
+        mode2: new URLSearchParams(window.location.search).get('mode') === '2',
+        selectedFiles: [],
+        getFileUrl(file) {
+            // This must match the Blade logic for file URL
+            return '{{ rtrim(Storage::disk(config('media-manager.disk', 'public'))->url('')) }}' + '/' + file.replace(/^\/+/, '');
+        },
+        submitFiles() {
+            const urls = this.selectedFiles.map(f => this.getFileUrl(f));
+            window.parent.postMessage({ type: 'media-manager-selected', files: urls }, '*');
+        }
+     }"
+     x-on:filepond-upload-completed="$wire.saveTmpFiles()">
     <div class="bg-white p-6 rounded shadow w-full max-w-5xl mx-auto">
         <h1 class="text-2xl font-bold mb-4">Media Manager</h1>
         <div class="flex flex-wrap items-center gap-2 mb-4">
@@ -49,13 +62,18 @@
                     @endforelse
                 </ul>
                 <h2 class="font-semibold mb-2">Files</h2>
+                <form x-show="mode2" @submit.prevent="submitFiles" class="mb-4">
+                    <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded text-sm mb-2">Submit Selected Files</button>
+                </form>
                 <ul>
                     @forelse ($files as $file)
                         <li class="flex items-center justify-between group py-1">
                             <div class="flex items-center">
+                                <template x-if="mode2">
+                                    <input type="checkbox" class="mr-2" :value="'{{ $file }}'" x-model="selectedFiles">
+                                </template>
                                 @php $mime = \Storage::disk(config('media-manager.disk', 'public'))->mimeType($file); @endphp
                                 @if (str_starts_with($mime, 'image/'))
-                                    {{-- <img src="{{ \Storage::disk(config('media-manager.disk', 'public'))->url($file) }}" alt="" class="w-8 h-8 object-cover rounded mr-2 border" /> --}}
                                     <svg class="size-5 mr-2 text-gray-400" viewBox="0 0 24 24"><path fill="#888888" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm0-2h14V5H5zm1-2h12l-3.75-5l-3 4L9 13zm-1 2V5zm3.5-9q.625 0 1.063-.437T10 8.5t-.437-1.062T8.5 7t-1.062.438T7 8.5t.438 1.063T8.5 10"/></svg>
                                 @else
                                     <svg class="size-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text-icon lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
@@ -77,4 +95,4 @@
         </div>
     </div>
     @filepondScripts
-</div> 
+</div>

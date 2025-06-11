@@ -10,24 +10,20 @@
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
-    <a href="{{ route('media-manager.index') }}" data-fancybox data-type="iframe" data-width="900" data-height="600">
-        Custom width and height using data attributes
+    <a class="flex border bg-white px-4 py-1 rounded-lg border-gray-200 shadow" href="{{ route('media-manager.index', ['mode' => 2]) }}" data-fancybox data-type="iframe" data-width="900" data-height="600">
+        Click here to chose or upload image(s)
     </a>
-
-    <div class="bg-white p-8 rounded shadow w-full max-w-lg mt-10">
-        <h1 class="text-2xl font-bold mb-4">Media Picker Demo</h1>
-        <livewire:media-manager.media-picker />
-        <div id="selected-images" class="mt-6"></div>
-    </div>
-
+    <div id="selected-images" class="flex flex-wrap justify-center mt-6"></div>
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
     @livewireScripts
     <script>
         Fancybox.bind();
 
-        document.addEventListener('livewire:load', function() {
-            window.Livewire.on('mediaPickerSelected', function(urls) {
+        // Listen for postMessage from iframe
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'media-manager-selected') {
+                const urls = event.data.files;
                 const container = document.getElementById('selected-images');
                 container.innerHTML = '';
                 (Array.isArray(urls) ? urls : [urls]).forEach(url => {
@@ -36,7 +32,11 @@
                     img.className = 'w-32 h-32 object-cover rounded border m-2 inline-block';
                     container.appendChild(img);
                 });
-            });
+                // Optionally close Fancybox after selection
+                if (window.Fancybox) {
+                    window.Fancybox.close();
+                }
+            }
         });
     </script>
 </body>
