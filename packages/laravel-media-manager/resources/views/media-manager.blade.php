@@ -11,7 +11,7 @@
         window.parent.postMessage({ type: 'media-manager-selected', files: urls }, '*');
     }
 }" x-on:filepond-upload-completed="$wire.saveTmpFiles()">
-    <div class="bg-white p-6 rounded shadow w-full container mx-auto">
+    <div class="bg-white p-6 rounded-lg shadow w-full container mx-auto">
         <div class="flex flex-wrap max-md:justify-center items-center gap-2 mb-4">
             <button wire:click="setFilter('all')"
                 class="cursor-pointer px-3 py-1 rounded-md text-sm font-medium border border-gray-300 mr-2 flex items-center gap-1"
