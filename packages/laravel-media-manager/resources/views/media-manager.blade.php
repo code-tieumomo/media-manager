@@ -74,16 +74,12 @@
         <div class="flex flex-col md:flex-row gap-8">
             <div class="md:min-w-xs w-full md:w-64">
                 <h2 class="font-semibold mb-2">Directory Tree</h2>
-                <div class="bg-gray-50 rounded-lg p-3 max-h-96 overflow-y-auto">
+                <div class="bg-[#f1f0ef] rounded-lg p-3 max-h-96 overflow-y-auto">
                     <!-- Root folder -->
-                    <div class="mb-2">
+                    <div class="mb-1">
                         <button wire:click="goToFolder('/')" 
-                                class="flex items-center text-gray-700 hover:text-blue-600 text-sm py-1 px-1 rounded hover:bg-blue-50 w-full text-left transition-colors
-                                       {{ $currentPath === '/' ? 'text-blue-600 bg-blue-50 font-medium' : '' }}">
-                            <svg class="w-4 h-4 mr-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                      d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-5l-2-2H5a2 2 0 00-2 2z"/>
-                            </svg>
+                                class="flex items-center text-gray-700 hover:text-gray-900 text-sm py-1 px-1 rounded hover:bg-gray-50 w-full text-left transition-colors cursor-pointer {{ $currentPath === '/' ? 'text-gray-600 bg-gray-50' : '' }}">
+                            <svg class="size-5 mr-1" viewBox="0 0 24 24"><g fill="none"><path fill="url(#fluentColorDocumentFolder240)" d="M8 6.25A2.25 2.25 0 0 1 10.25 4h7.5A2.25 2.25 0 0 1 20 6.25v8.5A2.25 2.25 0 0 1 17.75 17h-7.5A2.25 2.25 0 0 1 8 14.75z"/><path fill="url(#fluentColorDocumentFolder241)" d="M8 6.25A2.25 2.25 0 0 1 10.25 4h7.5A2.25 2.25 0 0 1 20 6.25v8.5A2.25 2.25 0 0 1 17.75 17h-7.5A2.25 2.25 0 0 1 8 14.75z"/><path fill="url(#fluentColorDocumentFolder243)" d="M4 4.25A2.25 2.25 0 0 1 6.25 2h9a2.25 2.25 0 0 1 2.25 2.25v10.5A2.25 2.25 0 0 1 15.25 17h-9A2.25 2.25 0 0 1 4 14.75z"/><path fill="url(#fluentColorDocumentFolder242)" d="M5.25 8A2.25 2.25 0 0 0 3 10.25v8.5A3.25 3.25 0 0 0 6.25 22h11.5A3.25 3.25 0 0 0 21 18.75v-1.5A2.25 2.25 0 0 0 18.75 15h-2.846a.75.75 0 0 1-.55-.24l-5.61-6.04A2.25 2.25 0 0 0 8.097 8z"/><defs><linearGradient id="fluentColorDocumentFolder240" x1="21.8" x2="23.639" y1="19.5" y2="5.773" gradientUnits="userSpaceOnUse"><stop stop-color="#BB45EA"/><stop offset="1" stop-color="#9C6CFE"/></linearGradient><linearGradient id="fluentColorDocumentFolder241" x1="20" x2="17" y1="8.5" y2="8.5" gradientUnits="userSpaceOnUse"><stop offset=".338" stop-color="#5750E2" stop-opacity="0"/><stop offset="1" stop-color="#5750E2"/></linearGradient><linearGradient id="fluentColorDocumentFolder242" x1="6.857" x2="6.857" y1="8" y2="27.091" gradientUnits="userSpaceOnUse"><stop offset=".241" stop-color="#FFD638"/><stop offset=".637" stop-color="#FAB500"/><stop offset=".985" stop-color="#CA6407"/></linearGradient><radialGradient id="fluentColorDocumentFolder243" cx="0" cy="0" r="1" gradientTransform="matrix(8.775 -11.5 18.53666 14.14428 8.05 14)" gradientUnits="userSpaceOnUse"><stop offset=".228" stop-color="#2764E7"/><stop offset=".685" stop-color="#5CD1FF"/><stop offset="1" stop-color="#6CE0FF"/></radialGradient></defs></g></svg>
                             <span class="font-medium">Root</span>
                         </button>
                     </div>
@@ -96,95 +92,58 @@
                 </div>
             </div>
             <div class="flex-1">
-                <h2 class="font-semibold mb-2">Folders</h2>
-                <ul class="mb-4">
-                    @if ($currentPath !== '/')
-                    <li>
-                        <button wire:click="goToFolder('{{ dirname($currentPath) }}')"
-                            class="text-gray-800 hover:underline flex gap-1 flex-1 text-left cursor-pointer">
-                            <svg class="inline w-5 h-5 mr-1 text-red-500" viewBox="0 0 24 24">
-                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2">
-                                    <path
-                                        d="M2 7.5V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-1.5M2 13h10" />
-                                    <path d="m5 10l-3 3l3 3" />
-                                </g>
-                            </svg>
-                            ..
-                        </button>
-                    </li>
-                    @endif
+                <h2 class="font-semibold mb-2">
+                    Folders ({{ count($folders) }})
+                </h2>
+                <div class="mb-8 grid grid-cols-8 gap-4">
                     @forelse ($folders as $folder)
-                    <li class="flex items-center justify-between group py-1">
+                    <div class="flex items-center justify-between group py-1">
                         <button wire:click="goToFolder('{{ $folder }}')"
-                            class="text-gray-800 hover:underline flex-1 text-left cursor-pointer">
-                            <svg class="inline w-5 h-5 mr-1 text-yellow-500" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-folder-open-icon lucide-folder-open">
-                                <path
-                                    d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />
-                            </svg>
+                            class="text-gray-800 hover:underline flex-1 cursor-pointer flex flex-col items-center group-hover:bg-[#f1f0ef] rounded p-2  transition-colors {{ $currentPath === $folder ? 'bg-gray-50 font-medium' : '' }}">
+                            <svg class="size-20" viewBox="0 0 24 24"><g fill="none"><path fill="url(#fluentColorDocumentFolder240)" d="M8 6.25A2.25 2.25 0 0 1 10.25 4h7.5A2.25 2.25 0 0 1 20 6.25v8.5A2.25 2.25 0 0 1 17.75 17h-7.5A2.25 2.25 0 0 1 8 14.75z"/><path fill="url(#fluentColorDocumentFolder241)" d="M8 6.25A2.25 2.25 0 0 1 10.25 4h7.5A2.25 2.25 0 0 1 20 6.25v8.5A2.25 2.25 0 0 1 17.75 17h-7.5A2.25 2.25 0 0 1 8 14.75z"/><path fill="url(#fluentColorDocumentFolder243)" d="M4 4.25A2.25 2.25 0 0 1 6.25 2h9a2.25 2.25 0 0 1 2.25 2.25v10.5A2.25 2.25 0 0 1 15.25 17h-9A2.25 2.25 0 0 1 4 14.75z"/><path fill="url(#fluentColorDocumentFolder242)" d="M5.25 8A2.25 2.25 0 0 0 3 10.25v8.5A3.25 3.25 0 0 0 6.25 22h11.5A3.25 3.25 0 0 0 21 18.75v-1.5A2.25 2.25 0 0 0 18.75 15h-2.846a.75.75 0 0 1-.55-.24l-5.61-6.04A2.25 2.25 0 0 0 8.097 8z"/><defs><linearGradient id="fluentColorDocumentFolder240" x1="21.8" x2="23.639" y1="19.5" y2="5.773" gradientUnits="userSpaceOnUse"><stop stop-color="#BB45EA"/><stop offset="1" stop-color="#9C6CFE"/></linearGradient><linearGradient id="fluentColorDocumentFolder241" x1="20" x2="17" y1="8.5" y2="8.5" gradientUnits="userSpaceOnUse"><stop offset=".338" stop-color="#5750E2" stop-opacity="0"/><stop offset="1" stop-color="#5750E2"/></linearGradient><linearGradient id="fluentColorDocumentFolder242" x1="6.857" x2="6.857" y1="8" y2="27.091" gradientUnits="userSpaceOnUse"><stop offset=".241" stop-color="#FFD638"/><stop offset=".637" stop-color="#FAB500"/><stop offset=".985" stop-color="#CA6407"/></linearGradient><radialGradient id="fluentColorDocumentFolder243" cx="0" cy="0" r="1" gradientTransform="matrix(8.775 -11.5 18.53666 14.14428 8.05 14)" gradientUnits="userSpaceOnUse"><stop offset=".228" stop-color="#2764E7"/><stop offset=".685" stop-color="#5CD1FF"/><stop offset="1" stop-color="#6CE0FF"/></radialGradient></defs></g></svg>
                             {{ basename($folder) }}
                         </button>
-                        <button wire:click="delete('{{ $folder }}')" class="text-red-500 ml-2" title="Delete folder">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </li>
+                    </div>
                     @empty
-                    <li class="text-gray-400">No folders</li>
+                    <div class="text-gray-400">No folders</div>
                     @endforelse
-                </ul>
-                <h2 class="font-semibold mb-2">Files</h2>
+                </div>
+                <h2 class="font-semibold mb-2">
+                    Files ({{ count($files) }})
+                </h2>
                 <form x-show="mode2" x-cloak @submit.prevent="submitFiles" class="mb-4">
                     <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded text-sm mb-2">Submit Selected
                         Files</button>
                 </form>
-                <ul>
+                <div class="mb-8 grid grid-cols-8 gap-4">
                     @forelse ($files as $file)
-                    <li class="flex items-center justify-between group py-1">
-                        <div class="flex items-center max-w-[calc(100%-6rem)]">
+                    @php 
+                        $mime = \Storage::disk(config('media-manager.disk', 'public'))->mimeType($file);
+                        $ext = pathinfo($file, PATHINFO_EXTENSION);
+                        $url = \Storage::disk(config('media-manager.disk', 'public'))->url($file);
+                    @endphp
+                    <div class="relative flex flex-col items-center group bg-white rounded p-2 hover:bg-[#f1f0ef] transition-colors">
+                        <span class="absolute top-1 right-2 bg-gray-800 text-white text-[10px] px-2 py-0.5 rounded-full uppercase z-10">{{ $ext }}</span>
+                        <div class="flex flex-col items-center w-full">
                             <template x-if="mode2">
-                                <input type="checkbox" class="mr-2" :value="'{{ $file }}'" x-model="selectedFiles">
+                                <input type="checkbox" class="mr-2 mb-1" :value="'{{ $file }}'" x-model="selectedFiles">
                             </template>
-                            @php $mime = \Storage::disk(config('media-manager.disk', 'public'))->mimeType($file);
-                            @endphp
                             @if (str_starts_with($mime, 'image/'))
-                            <svg class="shrink-0 size-5 mr-2 text-gray-400" viewBox="0 0 24 24">
-                                <path fill="#888888"
-                                    d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm0-2h14V5H5zm1-2h12l-3.75-5l-3 4L9 13zm-1 2V5zm3.5-9q.625 0 1.063-.437T10 8.5t-.437-1.062T8.5 7t-1.062.438T7 8.5t.438 1.063T8.5 10" />
-                            </svg>
+                                <a href="{{ $url }}" target="_blank" class="block mb-2">
+                                    <img src="{{ $url }}" alt="{{ basename($file) }}" class="object-cover aspect-video rounded w-full border border-gray-200 shadow-sm hover:scale-105 transition-transform" loading="lazy">
+                                </a>
                             @else
-                            <svg class="shrink-0 size-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="lucide lucide-file-text-icon lucide-file-text">
-                                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-                                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                                <path d="M10 9H8" />
-                                <path d="M16 13H8" />
-                                <path d="M16 17H8" />
-                            </svg>
+                                <a href="{{ $url }}" target="_blank" class="block mb-2">
+                                    <svg class="size-20" viewBox="0 0 24 24"><g fill="none"><path fill="url(#fluentColorDocument240)" d="M6 22h12a2 2 0 0 0 2-2V9l-5-2l-2-5H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2"/><path fill="url(#fluentColorDocument242)" fill-opacity=".5" d="M6 22h12a2 2 0 0 0 2-2V9l-5-2l-2-5H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2"/><path fill="url(#fluentColorDocument241)" d="M13 7.5V2l7 7h-5.5A1.5 1.5 0 0 1 13 7.5"/><defs><linearGradient id="fluentColorDocument240" x1="15.2" x2="16.822" y1="2" y2="18.87" gradientUnits="userSpaceOnUse"><stop stop-color="#6CE0FF"/><stop offset="1" stop-color="#4894FE"/></linearGradient><linearGradient id="fluentColorDocument241" x1="16.488" x2="14.738" y1="4.917" y2="7.833" gradientUnits="userSpaceOnUse"><stop stop-color="#9FF0F9"/><stop offset="1" stop-color="#B3E0FF"/></linearGradient><radialGradient id="fluentColorDocument242" cx="0" cy="0" r="1" gradientTransform="matrix(-8.66665 9.09357 -5.3691 -5.11703 20.667 2.625)" gradientUnits="userSpaceOnUse"><stop offset=".362" stop-color="#4A43CB"/><stop offset="1" stop-color="#4A43CB" stop-opacity="0"/></radialGradient></defs></g></svg>
+                                </a>
                             @endif
-                            <div class="truncate">{{ basename($file) }}</div>
+                            <div class="truncate w-full text-center text-xs mt-1">{{ basename($file) }}</div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <a href="{{ \Storage::disk(config('media-manager.disk', 'public'))->url($file) }}"
-                                target="_blank" class="text-blue-500 hover:underline text-xs">Preview</a>
-                            <button wire:click="delete('{{ $file }}')" class="text-red-500 ml-2 cursor-pointer"
-                                title="Delete file">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-                    </li>
+                    </div>
                     @empty
-                    <li class="text-gray-400">No files</li>
+                    <div class="text-gray-400">No files</div>
                     @endforelse
-                </ul>
+                </div>
             </div>
         </div>
     </div>

@@ -1,9 +1,9 @@
 @foreach($tree as $item)
     <div class="mb-1" style="margin-left: {{ $level * 12 }}px;">
-        <div class="flex items-center group">
+        <div class="flex items-center group mb-1">
             @if(!empty($item['children']))
                 <button wire:click="toggleFolder('{{ $item['path'] }}')" 
-                        class="flex items-center text-gray-600 hover:text-gray-800 focus:outline-none mr-1">
+                        class="flex items-center text-gray-600 hover:text-gray-800 focus:outline-none mr-1 cursor-pointer">
                     @if($item['expanded'])
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -19,12 +19,9 @@
             @endif
             
             <button wire:click="goToFolder('{{ $item['path'] }}')" 
-                    class="flex items-center text-gray-700 hover:text-blue-600 text-sm py-1 px-1 rounded hover:bg-blue-50 flex-1 text-left transition-colors
-                           {{ $currentPath === $item['path'] ? 'text-blue-600 bg-blue-50 font-medium' : '' }}">
-                <svg class="w-4 h-4 mr-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-5l-2-2H5a2 2 0 00-2 2z"/>
-                </svg>
+                    class="flex items-center text-gray-700 hover:text-gray-600 text-sm py-1 px-1 rounded hover:bg-gray-50 flex-1 text-left transition-colors
+                           {{ $currentPath === $item['path'] ? 'text-gray-600 bg-gray-50 font-medium' : '' }}">
+                <svg class="size-5 mr-1" viewBox="0 0 24 24"><g fill="none"><path fill="url(#fluentColorDocumentFolder240)" d="M8 6.25A2.25 2.25 0 0 1 10.25 4h7.5A2.25 2.25 0 0 1 20 6.25v8.5A2.25 2.25 0 0 1 17.75 17h-7.5A2.25 2.25 0 0 1 8 14.75z"/><path fill="url(#fluentColorDocumentFolder241)" d="M8 6.25A2.25 2.25 0 0 1 10.25 4h7.5A2.25 2.25 0 0 1 20 6.25v8.5A2.25 2.25 0 0 1 17.75 17h-7.5A2.25 2.25 0 0 1 8 14.75z"/><path fill="url(#fluentColorDocumentFolder243)" d="M4 4.25A2.25 2.25 0 0 1 6.25 2h9a2.25 2.25 0 0 1 2.25 2.25v10.5A2.25 2.25 0 0 1 15.25 17h-9A2.25 2.25 0 0 1 4 14.75z"/><path fill="url(#fluentColorDocumentFolder242)" d="M5.25 8A2.25 2.25 0 0 0 3 10.25v8.5A3.25 3.25 0 0 0 6.25 22h11.5A3.25 3.25 0 0 0 21 18.75v-1.5A2.25 2.25 0 0 0 18.75 15h-2.846a.75.75 0 0 1-.55-.24l-5.61-6.04A2.25 2.25 0 0 0 8.097 8z"/><defs><linearGradient id="fluentColorDocumentFolder240" x1="21.8" x2="23.639" y1="19.5" y2="5.773" gradientUnits="userSpaceOnUse"><stop stop-color="#BB45EA"/><stop offset="1" stop-color="#9C6CFE"/></linearGradient><linearGradient id="fluentColorDocumentFolder241" x1="20" x2="17" y1="8.5" y2="8.5" gradientUnits="userSpaceOnUse"><stop offset=".338" stop-color="#5750E2" stop-opacity="0"/><stop offset="1" stop-color="#5750E2"/></linearGradient><linearGradient id="fluentColorDocumentFolder242" x1="6.857" x2="6.857" y1="8" y2="27.091" gradientUnits="userSpaceOnUse"><stop offset=".241" stop-color="#FFD638"/><stop offset=".637" stop-color="#FAB500"/><stop offset=".985" stop-color="#CA6407"/></linearGradient><radialGradient id="fluentColorDocumentFolder243" cx="0" cy="0" r="1" gradientTransform="matrix(8.775 -11.5 18.53666 14.14428 8.05 14)" gradientUnits="userSpaceOnUse"><stop offset=".228" stop-color="#2764E7"/><stop offset=".685" stop-color="#5CD1FF"/><stop offset="1" stop-color="#6CE0FF"/></radialGradient></defs></g></svg>
                 <span class="truncate">{{ $item['name'] }}</span>
             </button>
         </div>
