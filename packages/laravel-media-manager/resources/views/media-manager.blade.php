@@ -90,8 +90,31 @@
                         <p class="text-gray-400 text-sm">No subdirectories found</p>
                     @endif
                 </div>
-                <div class="mt-4 p-4 border rounded-lg">
-
+                <div class="mt-4 bg-[#f1f0ef] rounded-lg p-3 overflow-y-auto">
+                    <div>
+                        <div class="relative h-4 w-full rounded-2xl border border-gray-200 bg-white dark:bg-dark-3">
+                            <div
+                                class="absolute left-0 top-0 flex h-full items-center justify-center rounded-2xl bg-gray-700 text-xs font-semibold text-white transition-all duration-300" style="width: {{ $totalSizePercent ?? 0 }}%">
+                                @if ($totalSizePercent > 12)
+                                    {{ $totalSizePercent ?? 0 }}%
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="mt-1">
+                        <li class="flex items-center justify-between py-1">
+                            <span class="text-sm text-gray-600">Total Size:</span>
+                            <span class="text-sm font-semibold">{{ $totalSizeHuman }} / {{ $displayedMaxTotalSize }}</span>
+                        </li>
+                        <li class="flex items-center justify-between py-1">
+                            <span class="text-sm text-gray-600">Total Files:</span>
+                            <span class="text-sm font-semibold">{{ $totalFiles }}</span>
+                        </li>
+                        <li class="flex items-center justify-between py-1">
+                            <span class="text-sm text-gray-600">Total Folders:</span>
+                            <span class="text-sm font-semibold">{{ $totalFolders }}</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="flex-1 @container">
@@ -119,7 +142,7 @@
                     <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded text-sm mb-2">Submit Selected
                         Files</button>
                 </form>
-                <div class="mb-8 grid grid-cols-8 gap-4">
+                <div class="grid grid-cols-8 gap-4">
                     @forelse ($files as $file)
                     @php 
                         $mime = \Storage::disk(config('media-manager.disk', 'public'))->mimeType($file);

@@ -26,6 +26,13 @@ class MediaManager extends Component
     public $directoryTree = [];
     public $expandedFolders = [];
 
+    // Statistics properties
+    public $totalSizePercent = 0;
+    public $totalSizeHuman = '0B';
+    public $totalFiles = 0;
+    public $totalFolders = 0;
+    public $displayedMaxTotalSize = 0;
+
     protected $rules = [
         'upload.*' => 'file',
         'newFolderName' => 'string|max:255',
@@ -37,6 +44,8 @@ class MediaManager extends Component
         $this->refreshFiles();
         $this->refreshDirectoryTree();
         $this->autoExpandCurrentPath();
+
+        $this->displayedMaxTotalSize = $this->humanFileSize(config('media-manager.max_total_size', 1073741824));
     }
 
     public function buildDirectoryTree($rootPath = '/')
@@ -105,6 +114,39 @@ class MediaManager extends Component
         $dirs = Storage::disk($disk)->directories($this->currentPath);
         $this->files = $this->filterFiles($all);
         $this->folders = $dirs;
+
+        // Statistic variables
+        $this->totalFiles = count($this->files);
+        $this->totalFolders = count($this->folders);
+        $this->totalSizeHuman = $this->getTotalSizeHuman($this->files, $disk);
+        $this->totalSizePercent = $this->getTotalSizePercent($this->files, $disk);
+    }
+
+    private function getTotalSizeHuman($files, $disk)
+    {
+        $total = 0;
+        foreach ($files as $file) {
+            $total += Storage::disk($disk)->size($file);
+        }
+        return $this->humanFileSize($total);
+    }
+
+    private function getTotalSizePercent($files, $disk)
+    {
+        $total = 0;
+        foreach ($files as $file) {
+            $total += Storage::disk($disk)->size($file);
+        }
+        $max = config('media-manager.max_total_size', 1073741824); // 1GB in bytes by default
+        return min(100, $max > 0 ? round(($total / $max) * 100) : 0);
+    }
+
+    private function humanFileSize($size, $precision = 1)
+    {
+        if ($size == 0) return '0B';
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        $base = floor(log($size, 1024));
+        return round($size / pow(1024, $base), $precision) . $units[$base];
     }
 
     public function filterFiles($files)
@@ -203,4 +245,4 @@ class MediaManager extends Component
     {
         return view('media-manager::media-manager');
     }
-} 
+}
