@@ -72,14 +72,14 @@
             <div class="my-2 w-full h-px bg-gray-200"></div>
         </div>
         <div class="flex flex-col md:flex-row gap-8">
-            <div class="md:min-w-xs w-full md:w-64">
+            <div class="md:max-w-xs w-full flex flex-col grow">
                 <h2 class="font-semibold mb-2">Directory Tree</h2>
-                <div class="bg-[#f1f0ef] rounded-lg p-3 max-h-96 overflow-y-auto">
+                <div class="bg-[#f1f0ef] rounded-lg p-3 overflow-y-auto grow">
                     <!-- Root folder -->
                     <div class="mb-1">
                         <button wire:click="goToFolder('/')" 
                                 class="flex items-center text-gray-700 hover:text-gray-900 text-sm py-1 px-1 rounded hover:bg-gray-50 w-full text-left transition-colors cursor-pointer {{ $currentPath === '/' ? 'text-gray-600 bg-gray-50' : '' }}">
-                            <svg class="size-5 mr-1" viewBox="0 0 24 24"><g fill="none"><path fill="url(#fluentColorDocumentFolder240)" d="M8 6.25A2.25 2.25 0 0 1 10.25 4h7.5A2.25 2.25 0 0 1 20 6.25v8.5A2.25 2.25 0 0 1 17.75 17h-7.5A2.25 2.25 0 0 1 8 14.75z"/><path fill="url(#fluentColorDocumentFolder241)" d="M8 6.25A2.25 2.25 0 0 1 10.25 4h7.5A2.25 2.25 0 0 1 20 6.25v8.5A2.25 2.25 0 0 1 17.75 17h-7.5A2.25 2.25 0 0 1 8 14.75z"/><path fill="url(#fluentColorDocumentFolder243)" d="M4 4.25A2.25 2.25 0 0 1 6.25 2h9a2.25 2.25 0 0 1 2.25 2.25v10.5A2.25 2.25 0 0 1 15.25 17h-9A2.25 2.25 0 0 1 4 14.75z"/><path fill="url(#fluentColorDocumentFolder242)" d="M5.25 8A2.25 2.25 0 0 0 3 10.25v8.5A3.25 3.25 0 0 0 6.25 22h11.5A3.25 3.25 0 0 0 21 18.75v-1.5A2.25 2.25 0 0 0 18.75 15h-2.846a.75.75 0 0 1-.55-.24l-5.61-6.04A2.25 2.25 0 0 0 8.097 8z"/><defs><linearGradient id="fluentColorDocumentFolder240" x1="21.8" x2="23.639" y1="19.5" y2="5.773" gradientUnits="userSpaceOnUse"><stop stop-color="#BB45EA"/><stop offset="1" stop-color="#9C6CFE"/></linearGradient><linearGradient id="fluentColorDocumentFolder241" x1="20" x2="17" y1="8.5" y2="8.5" gradientUnits="userSpaceOnUse"><stop offset=".338" stop-color="#5750E2" stop-opacity="0"/><stop offset="1" stop-color="#5750E2"/></linearGradient><linearGradient id="fluentColorDocumentFolder242" x1="6.857" x2="6.857" y1="8" y2="27.091" gradientUnits="userSpaceOnUse"><stop offset=".241" stop-color="#FFD638"/><stop offset=".637" stop-color="#FAB500"/><stop offset=".985" stop-color="#CA6407"/></linearGradient><radialGradient id="fluentColorDocumentFolder243" cx="0" cy="0" r="1" gradientTransform="matrix(8.775 -11.5 18.53666 14.14428 8.05 14)" gradientUnits="userSpaceOnUse"><stop offset=".228" stop-color="#2764E7"/><stop offset=".685" stop-color="#5CD1FF"/><stop offset="1" stop-color="#6CE0FF"/></radialGradient></defs></g></svg>
+                            <svg class="size-5 mr-1" viewBox="0 0 32 32"><!-- Icon from VSCode Icons by Roberto Huertas - https://github.com/vscode-icons/vscode-icons/blob/master/LICENSE --><path fill="#dcb67a" d="M27.4 5.5h-9.2l-2.1 4.2H4.3v16.8h25.2v-21Zm0 18.7H6.6V11.8h20.8Zm0-14.5h-8.2l1-2.1h7.1v2.1Z"/><path fill="#dcb67a" d="M25.7 13.7H.5l3.8 12.8h25.2z"/></svg>
                             <span class="font-medium">Root</span>
                         </button>
                     </div>
@@ -90,17 +90,21 @@
                         <p class="text-gray-400 text-sm">No subdirectories found</p>
                     @endif
                 </div>
+                <div class="mt-4 p-4 border rounded-lg">
+
+                </div>
             </div>
-            <div class="flex-1">
+            <div class="flex-1 @container">
                 <h2 class="font-semibold mb-2">
                     Folders ({{ count($folders) }})
                 </h2>
-                <div class="mb-8 grid grid-cols-8 gap-4">
+                <div class="mb-8 grid grid-cols-3 @md:grid-cols-8 gap-4">
                     @forelse ($folders as $folder)
                     <div class="flex items-center justify-between group py-1">
                         <button wire:click="goToFolder('{{ $folder }}')"
                             class="text-gray-800 hover:underline flex-1 cursor-pointer flex flex-col items-center group-hover:bg-[#f1f0ef] rounded p-2  transition-colors {{ $currentPath === $folder ? 'bg-gray-50 font-medium' : '' }}">
-                            <svg class="size-20" viewBox="0 0 24 24"><g fill="none"><path fill="url(#fluentColorDocumentFolder240)" d="M8 6.25A2.25 2.25 0 0 1 10.25 4h7.5A2.25 2.25 0 0 1 20 6.25v8.5A2.25 2.25 0 0 1 17.75 17h-7.5A2.25 2.25 0 0 1 8 14.75z"/><path fill="url(#fluentColorDocumentFolder241)" d="M8 6.25A2.25 2.25 0 0 1 10.25 4h7.5A2.25 2.25 0 0 1 20 6.25v8.5A2.25 2.25 0 0 1 17.75 17h-7.5A2.25 2.25 0 0 1 8 14.75z"/><path fill="url(#fluentColorDocumentFolder243)" d="M4 4.25A2.25 2.25 0 0 1 6.25 2h9a2.25 2.25 0 0 1 2.25 2.25v10.5A2.25 2.25 0 0 1 15.25 17h-9A2.25 2.25 0 0 1 4 14.75z"/><path fill="url(#fluentColorDocumentFolder242)" d="M5.25 8A2.25 2.25 0 0 0 3 10.25v8.5A3.25 3.25 0 0 0 6.25 22h11.5A3.25 3.25 0 0 0 21 18.75v-1.5A2.25 2.25 0 0 0 18.75 15h-2.846a.75.75 0 0 1-.55-.24l-5.61-6.04A2.25 2.25 0 0 0 8.097 8z"/><defs><linearGradient id="fluentColorDocumentFolder240" x1="21.8" x2="23.639" y1="19.5" y2="5.773" gradientUnits="userSpaceOnUse"><stop stop-color="#BB45EA"/><stop offset="1" stop-color="#9C6CFE"/></linearGradient><linearGradient id="fluentColorDocumentFolder241" x1="20" x2="17" y1="8.5" y2="8.5" gradientUnits="userSpaceOnUse"><stop offset=".338" stop-color="#5750E2" stop-opacity="0"/><stop offset="1" stop-color="#5750E2"/></linearGradient><linearGradient id="fluentColorDocumentFolder242" x1="6.857" x2="6.857" y1="8" y2="27.091" gradientUnits="userSpaceOnUse"><stop offset=".241" stop-color="#FFD638"/><stop offset=".637" stop-color="#FAB500"/><stop offset=".985" stop-color="#CA6407"/></linearGradient><radialGradient id="fluentColorDocumentFolder243" cx="0" cy="0" r="1" gradientTransform="matrix(8.775 -11.5 18.53666 14.14428 8.05 14)" gradientUnits="userSpaceOnUse"><stop offset=".228" stop-color="#2764E7"/><stop offset=".685" stop-color="#5CD1FF"/><stop offset="1" stop-color="#6CE0FF"/></radialGradient></defs></g></svg>
+                            <svg class="size-20" viewBox="0 0 32 32"><!-- Icon from VSCode Icons by Roberto Huertas - https://github.com/vscode-icons/vscode-icons/blob/master/LICENSE --><path fill="#dcb67a" d="M27.4 5.5h-9.2l-2.1 4.2H4.3v16.8h25.2v-21Zm0 18.7H6.6V11.8h20.8Zm0-14.5h-8.2l1-2.1h7.1v2.1Z"/><path fill="#dcb67a" d="M25.7 13.7H.5l3.8 12.8h25.2z"/></svg>
+                            <span class="font-medium">Root</span>
                             {{ basename($folder) }}
                         </button>
                     </div>
@@ -134,7 +138,7 @@
                                 </a>
                             @else
                                 <a href="{{ $url }}" target="_blank" class="block mb-2">
-                                    <svg class="size-20" viewBox="0 0 24 24"><g fill="none"><path fill="url(#fluentColorDocument240)" d="M6 22h12a2 2 0 0 0 2-2V9l-5-2l-2-5H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2"/><path fill="url(#fluentColorDocument242)" fill-opacity=".5" d="M6 22h12a2 2 0 0 0 2-2V9l-5-2l-2-5H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2"/><path fill="url(#fluentColorDocument241)" d="M13 7.5V2l7 7h-5.5A1.5 1.5 0 0 1 13 7.5"/><defs><linearGradient id="fluentColorDocument240" x1="15.2" x2="16.822" y1="2" y2="18.87" gradientUnits="userSpaceOnUse"><stop stop-color="#6CE0FF"/><stop offset="1" stop-color="#4894FE"/></linearGradient><linearGradient id="fluentColorDocument241" x1="16.488" x2="14.738" y1="4.917" y2="7.833" gradientUnits="userSpaceOnUse"><stop stop-color="#9FF0F9"/><stop offset="1" stop-color="#B3E0FF"/></linearGradient><radialGradient id="fluentColorDocument242" cx="0" cy="0" r="1" gradientTransform="matrix(-8.66665 9.09357 -5.3691 -5.11703 20.667 2.625)" gradientUnits="userSpaceOnUse"><stop offset=".362" stop-color="#4A43CB"/><stop offset="1" stop-color="#4A43CB" stop-opacity="0"/></radialGradient></defs></g></svg>
+                                    <svg class="size-20" viewBox="0 0 512 512"><!-- Icon from Firefox OS Emoji by Mozilla - https://mozilla.github.io/fxemoji/LICENSE.md --><path fill="#F9E7C0" d="M437.567 512H88.004a8.18 8.18 0 0 1-8.182-8.182V8.182A8.18 8.18 0 0 1 88.004 0H288.79l156.96 156.96v346.858a8.183 8.183 0 0 1-8.183 8.182"/><path fill="#EAC083" d="m288.79 0l156.96 156.96H322.152c-18.426 0-33.363-14.937-33.363-33.363V0z"/></svg>
                                 </a>
                             @endif
                             <div class="truncate w-full text-center text-xs mt-1">{{ basename($file) }}</div>

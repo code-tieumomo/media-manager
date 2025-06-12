@@ -10,7 +10,7 @@
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
-    <a class="flex border bg-white px-4 py-1 rounded-lg border-gray-200 shadow" href="{{ route('media-manager.index', ['mode' => 2]) }}" data-fancybox data-type="iframe" data-width="900" data-height="600">
+    <a class="flex border bg-white px-4 py-1 rounded-lg border-gray-200 shadow" href="{{ route('media-manager.index', ['mode' => 2]) }}" data-fancybox data-type="iframe" data-width="90vw" data-height="690vh">
         Click here to chose or upload image(s)
     </a>
     <div id="selected-images" class="flex flex-wrap justify-center mt-6"></div>
