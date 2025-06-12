@@ -127,7 +127,6 @@
                         <button wire:click="goToFolder('{{ $folder }}')"
                             class="text-gray-800 hover:underline flex-1 cursor-pointer flex flex-col items-center group-hover:bg-[#f1f0ef] rounded p-2  transition-colors {{ $currentPath === $folder ? 'bg-gray-50 font-medium' : '' }}">
                             <svg class="size-20" viewBox="0 0 32 32"><!-- Icon from VSCode Icons by Roberto Huertas - https://github.com/vscode-icons/vscode-icons/blob/master/LICENSE --><path fill="#dcb67a" d="M27.4 5.5h-9.2l-2.1 4.2H4.3v16.8h25.2v-21Zm0 18.7H6.6V11.8h20.8Zm0-14.5h-8.2l1-2.1h7.1v2.1Z"/><path fill="#dcb67a" d="M25.7 13.7H.5l3.8 12.8h25.2z"/></svg>
-                            <span class="font-medium">Root</span>
                             {{ basename($folder) }}
                         </button>
                     </div>
