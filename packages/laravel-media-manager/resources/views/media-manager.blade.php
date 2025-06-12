@@ -130,7 +130,7 @@
                             </template>
                             @if (str_starts_with($mime, 'image/'))
                                 <a href="{{ $url }}" target="_blank" class="block mb-2">
-                                    <img src="{{ $url }}" alt="{{ basename($file) }}" class="object-cover aspect-video rounded w-full border border-gray-200 shadow-sm hover:scale-105 transition-transform" loading="lazy">
+                                    <img src="{{ $url }}" alt="{{ basename($file) }}" class="object-cover size-20 rounded w-full border border-gray-200 shadow-sm hover:scale-105 transition-transform" loading="lazy">
                                 </a>
                             @else
                                 <a href="{{ $url }}" target="_blank" class="block mb-2">
