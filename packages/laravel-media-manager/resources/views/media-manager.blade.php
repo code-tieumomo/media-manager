@@ -126,7 +126,7 @@
                     <div class="flex items-center justify-between group py-1">
                         <button wire:click="goToFolder('{{ $folder }}')"
                             class="text-gray-800 hover:underline flex-1 cursor-pointer flex flex-col items-center group-hover:bg-[#f1f0ef] rounded p-2  transition-colors {{ $currentPath === $folder ? 'bg-gray-50 font-medium' : '' }}">
-                            <svg class="size-20" viewBox="0 0 32 32"><!-- Icon from VSCode Icons by Roberto Huertas - https://github.com/vscode-icons/vscode-icons/blob/master/LICENSE --><path fill="#dcb67a" d="M27.4 5.5h-9.2l-2.1 4.2H4.3v16.8h25.2v-21Zm0 18.7H6.6V11.8h20.8Zm0-14.5h-8.2l1-2.1h7.1v2.1Z"/><path fill="#dcb67a" d="M25.7 13.7H.5l3.8 12.8h25.2z"/></svg>
+                            <svg class="size-20" viewBox="0 0 32 32"><path fill="#dcb67a" d="M27.4 5.5h-9.2l-2.1 4.2H4.3v16.8h25.2v-21Zm0 18.7H6.6V11.8h20.8Zm0-14.5h-8.2l1-2.1h7.1v2.1Z"/><path fill="#dcb67a" d="M25.7 13.7H.5l3.8 12.8h25.2z"/></svg>
                             {{ basename($folder) }}
                         </button>
                     </div>
@@ -160,7 +160,7 @@
                                 </a>
                             @else
                                 <a href="{{ $url }}" target="_blank" class="block mb-2">
-                                    <svg class="size-20" viewBox="0 0 512 512"><!-- Icon from Firefox OS Emoji by Mozilla - https://mozilla.github.io/fxemoji/LICENSE.md --><path fill="#F9E7C0" d="M437.567 512H88.004a8.18 8.18 0 0 1-8.182-8.182V8.182A8.18 8.18 0 0 1 88.004 0H288.79l156.96 156.96v346.858a8.183 8.183 0 0 1-8.183 8.182"/><path fill="#EAC083" d="m288.79 0l156.96 156.96H322.152c-18.426 0-33.363-14.937-33.363-33.363V0z"/></svg>
+                                    <svg class="size-20" viewBox="0 0 512 512"><path fill="#F9E7C0" d="M437.567 512H88.004a8.18 8.18 0 0 1-8.182-8.182V8.182A8.18 8.18 0 0 1 88.004 0H288.79l156.96 156.96v346.858a8.183 8.183 0 0 1-8.183 8.182"/><path fill="#EAC083" d="m288.79 0l156.96 156.96H322.152c-18.426 0-33.363-14.937-33.363-33.363V0z"/></svg>
                                 </a>
                             @endif
                             <div class="truncate w-full text-center text-xs mt-1">{{ basename($file) }}</div>

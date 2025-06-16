@@ -27,10 +27,14 @@ class MediaManagerServiceProvider extends ServiceProvider
         // Load views
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'media-manager');
 
-        // Register Blade alias for media picker if Livewire is available
+        // Register Blade alias for media manager if Livewire is available
         if (class_exists(\Livewire\Livewire::class)) {
             \Livewire\Livewire::component('media-manager', \MediaManager\Http\Livewire\MediaManager::class);
-            \Livewire\Livewire::component('media-manager.media-picker', \MediaManager\Http\Livewire\MediaPicker::class);
+        }
+
+        // Register the media picker as a Blade component
+        if (class_exists(\Illuminate\Support\Facades\Blade::class)) {
+            \Illuminate\Support\Facades\Blade::component('media-manager::media-picker', 'media-manager::picker');
         }
     }
 
