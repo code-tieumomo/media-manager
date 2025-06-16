@@ -1,14 +1,30 @@
 <div class="min-h-screen bg-gray-100 p-6" x-data="{
     mode2: new URLSearchParams(window.location.search).get('mode') === '2',
     sourceId: new URLSearchParams(window.location.search).get('source_id') || null,
-    selectedFiles: [],
+    selectedFiles: (() => {
+        const dataParam = new URLSearchParams(window.location.search).get('data');
+        console.log('dataParam', dataParam);
+        try {
+            return dataParam ? JSON.parse(dataParam) : [];
+        } catch (e) {
+            return [];
+        }
+    })(),
+    multiple: new URLSearchParams(window.location.search).get('multiple') === 'true',
     expandedFolders: @js($expandedFolders),
     getFileUrl(file) {
         // This must match the Blade logic for file URL
         return '{{ rtrim(Storage::disk(config('media-manager.disk', 'public'))->url('')) }}' + '/' + file.replace(/^\/+/, '');
     },
     submitFiles() {
-        const urls = this.selectedFiles.map(f => this.getFileUrl(f));
+        let urls = [];
+
+        if (this.multiple) {
+            urls = this.selectedFiles.map(f => this.getFileUrl(f));
+        } else if (this.selectedFiles) {
+            urls = [this.getFileUrl(this.selectedFiles)];
+        }
+
         window.parent.postMessage({ type: 'media-manager-selected', files: urls }, '*');
     },
     isExpanded(path) {
@@ -77,13 +93,13 @@
                 <div class="bg-[#f1f0ef] rounded-lg p-3 overflow-y-auto grow">
                     <!-- Root folder -->
                     <div class="mb-1">
-                        <button wire:click="goToFolder('/')" 
+                        <button wire:click="goToFolder('/')"
                                 class="flex items-center text-gray-700 hover:text-gray-900 text-sm py-1 px-1 rounded hover:bg-gray-50 w-full text-left transition-colors cursor-pointer {{ $currentPath === '/' ? 'text-gray-600 bg-gray-50' : '' }}">
                             <svg class="size-5 mr-1" viewBox="0 0 32 32"><!-- Icon from VSCode Icons by Roberto Huertas - https://github.com/vscode-icons/vscode-icons/blob/master/LICENSE --><path fill="#dcb67a" d="M27.4 5.5h-9.2l-2.1 4.2H4.3v16.8h25.2v-21Zm0 18.7H6.6V11.8h20.8Zm0-14.5h-8.2l1-2.1h7.1v2.1Z"/><path fill="#dcb67a" d="M25.7 13.7H.5l3.8 12.8h25.2z"/></svg>
                             <span class="font-medium">Root</span>
                         </button>
                     </div>
-                    
+
                     @if(!empty($directoryTree))
                         @include('media-manager::partials.directory-tree', ['tree' => $directoryTree, 'level' => 0])
                     @else
@@ -143,16 +159,37 @@
                 </form>
                 <div class="grid grid-cols-8 gap-4">
                     @forelse ($files as $file)
-                    @php 
+                    @php
                         $mime = \Storage::disk(config('media-manager.disk', 'public'))->mimeType($file);
                         $ext = pathinfo($file, PATHINFO_EXTENSION);
                         $url = \Storage::disk(config('media-manager.disk', 'public'))->url($file);
                     @endphp
-                    <div class="relative flex flex-col items-center group bg-white rounded p-2 hover:bg-[#f1f0ef] transition-colors">
+                    <div class="relative flex flex-col items-center group bg-white rounded p-2 hover:bg-[#f1f0ef] transition-colors"
+                         :class="multiple
+                            ? { 'border-2 border-blue-500': selectedFiles.includes('{{ $file }}') }
+                            : { 'border-2 border-blue-500': selectedFiles === '{{ $file }}' }"
+                    >
                         <span class="absolute top-1 right-2 bg-gray-800 text-white text-[10px] px-2 py-0.5 rounded-full uppercase z-10">{{ $ext }}</span>
-                        <div class="flex flex-col items-center w-full">
+                        <div class="flex flex-col items-center w-full " >
                             <template x-if="mode2">
-                                <input type="checkbox" class="mr-2 mb-1" :value="'{{ $file }}'" x-model="selectedFiles">
+                                <input
+                                    type="checkbox"
+                                    class="mr-2 mb-1"
+                                    :value="'{{ $file }}'"
+                                    x-model="selectedFiles"
+                                    :checked="multiple ? selectedFiles.includes('{{ $file }}') : selectedFiles === '{{ $file }}'"
+                                    @change="
+                                       if (multiple) {
+                                           if ($event.target.checked) {
+                                               selectedFiles.push('{{ $file }}')
+                                           } else {
+                                               selectedFiles = selectedFiles.filter(f => f !== '{{ $file }}')
+                                           }
+                                       } else {
+                                           selectedFiles = $event.target.checked ? '{{ $file }}' : ''
+                                       }
+                                   "
+                                >
                             </template>
                             @if (str_starts_with($mime, 'image/'))
                                 <a href="{{ $url }}" target="_blank" class="block mb-2">
